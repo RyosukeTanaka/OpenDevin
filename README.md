@@ -69,6 +69,26 @@ docker run -it \
     --name opendevin-app-$(date +%Y%m%d%H%M%S) \
     ghcr.io/opendevin/opendevin:0.6
 ```
+On windows terminal, run below.
+```
+$OPENDEVIN_WORKSPACE = "${PWD}/workspace"
+$SANDBOX_USER_ID = (Get-LocalUser | Where-Object {$_.Name -eq $env:USERNAME}).SID
+$CURRENT_DATE = Get-Date -Format yyyyMMddHHmmss
+
+docker run -it `
+    --pull=always `
+    -e SANDBOX_USER_ID=$SANDBOX_USER_ID `
+    -e PERSIST_SANDBOX="true" `
+    -e SSH_PASSWORD="make something up here" `
+    -e WORKSPACE_MOUNT_PATH=$OPENDEVIN_WORKSPACE `
+    -v ${OPENDEVIN_WORKSPACE}:C:/opt/workspace_base `
+    -v //var/run/docker.sock:/var/run/docker.sock `
+    -p 3000:3000 `
+    --add-host host.docker.internal:host-gateway `
+    --name opendevin-app-$CURRENT_DATE `
+    ghcr.io/opendevin/opendevin:0.6
+
+```
 
 You'll find OpenDevin running at [http://localhost:3000](http://localhost:3000) with access to `./workspace`. To have OpenDevin operate on your code, place it in `./workspace`.
 
