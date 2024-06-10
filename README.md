@@ -71,8 +71,8 @@ docker run -it \
 ```
 On windows terminal, run below.
 ```
-$OPENDEVIN_WORKSPACE = "${PWD}/workspace"
-$SANDBOX_USER_ID = (Get-LocalUser | Where-Object {$_.Name -eq $env:USERNAME}).SID
+$OPENDEVIN_WORKSPACE = "${PWD}\workspace"
+$SANDBOX_USER_ID = 1000 # A common user ID for non-root users in Unix systems
 $CURRENT_DATE = Get-Date -Format yyyyMMddHHmmss
 
 docker run -it `
@@ -81,12 +81,13 @@ docker run -it `
     -e PERSIST_SANDBOX="true" `
     -e SSH_PASSWORD="make something up here" `
     -e WORKSPACE_MOUNT_PATH=$OPENDEVIN_WORKSPACE `
-    -v ${OPENDEVIN_WORKSPACE}:C:/opt/workspace_base `
-    -v //var/run/docker.sock:/var/run/docker.sock `
+    -v ${OPENDEVIN_WORKSPACE}:/opt/workspace_base `
+    -v /var/run/docker.sock:/var/run/docker.sock `
     -p 3000:3000 `
     --add-host host.docker.internal:host-gateway `
     --name opendevin-app-$CURRENT_DATE `
     ghcr.io/opendevin/opendevin:0.6
+
 
 ```
 
